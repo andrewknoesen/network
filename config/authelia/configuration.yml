@@ -5,7 +5,7 @@
 
 # This secret can also be set using the env variables AUTHELIA_JWT_SECRET_FILE
 # generate with 'docker run authelia/authelia:latest authelia crypto rand --length 128 --charset alphanumeric'
-jwt_secret: uxdeCVlwuqkJAX6hFfmeI3tHHuYddKhIP0ieHLDq5XT4PI2xvm0e5VHQkUkmJshHIZNkfCyznNOv5LqijH3AipnfowrUj9kdg2t7zAAdxln2sMXcr9J6f3mEaoXpIY6W
+jwt_secret: "${AUTHELIA_JWT_SECRET}"
 default_redirection_url: https://auth.knoesen.link    ### add your domain of autehlia here
 
 log:
@@ -39,7 +39,7 @@ access_control:
 session:
   name: authelia_session
   domain: knoesen.link
-  secret: g9VmYr9qNkBf2Fc94cJ9cIFLpWgzxfKk4lXbK7MVkxHnj3qQCNQkUa39dCAD2E2q
+  secret: "${AUTHELIA_SESSION_SECRET}"
   expiration: 1h
   inactivity: 5m
   remember_me_duration:  1M
@@ -50,8 +50,8 @@ regulation:
   ban_time: 300
 
 storage:
+  encryption_key: "${AUTHELIA_ENCRYPTION_KEY}"
 # generate with 'docker run authelia/authelia:latest authelia crypto rand --length 128 --charset alphanumeric'
-  encryption_key: IrjnQXWuLiLeEo0v7LcZMCHfjpJ6qj7DMymcT5oG4aSgh63gaNrozOThgxmjiba9XqAcVJhqVViKLP8u11ZaYhJmqCGZUBvZZI7proOcXwzJaRZLLXLaKHByfe83xcHr
   local:
     path: /config/db.sqlite3
 
