@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  # Cloudflared tunnel service
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --no-autoupdate run
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - internal
+
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    volumes:
+      - ./config/authelia:/config
+    expose:
+      - 9091
+    restart: unless-stopped
+    environment:
+      - TZ=Africa/Harare
+    networks:
+      - media_network
+      - internal
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    networks:
+      - media_network
+      - internal
+    ports: 
+      - "80:80" 
+      - "443:443" 
+      - "8585:8080"
+    volumes: 
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" 
+      - "./data/traefik/:/data" 
+      - "./config/traefik/traefik.yml:/etc/traefik/traefik.yml" 
+      - "./config/traefik/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml" 
+      - "./log/:/log/"
+
+networks:
+  media_network:
+    external: true
+  internal:
+    driver: bridge

@@ -1,0 +1,242 @@
+# traefik_dynamic.yml
+
+http:
+  routers:
+    authelia:
+      rule: Host(`auth.knoesen.link`)
+      entrypoints:
+        - websecure
+      service: authelia
+      tls:
+        certResolver: myresolver
+
+    api:
+      rule: Host(`knoesen.link`) && PathPrefix(`/api`)
+      service: api@internal
+      entrypoints:
+        - "websecure"
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - auth
+
+    dashboard:
+      rule: Host(`knoesen.link`)
+      service: dashboard@internal
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - auth
+
+    overseerr:
+      rule: Host(`overseerr.knoesen.link`)
+      service: overseerr
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+    homarr:
+      rule: Host(`homarr.knoesen.link`)
+      service: homarr
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    plex:
+      rule: Host(`plex.knoesen.link`)
+      service: plex
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    hass:
+      rule: Host(`hass.knoesen.link`)
+      service: hass
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    grafana:
+      rule: Host(`grafana.knoesen.link`)
+      service: grafana
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    glances:
+      rule: Host(`glances.knoesen.link`)
+      service: glances
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    sab:
+      rule: Host(`sab.knoesen.link`)
+      service: sab
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    torrent:
+      rule: Host(`torrent.knoesen.link`)
+      service: torrent
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    tdarr:
+      rule: Host(`tdarr.knoesen.link`)
+      service: tdarr
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    sonarr:
+      rule: Host(`sonarr.knoesen.link`)
+      service: sonarr
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    radarr:
+      rule: Host(`radarr.knoesen.link`)
+      service: radarr
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    readarr:
+      rule: Host(`readarr.knoesen.link`)
+      service: readarr
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    calibre:
+      rule: Host(`calibre.knoesen.link`)
+      service: calibre
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+    camera:
+      rule: Host(`camera.knoesen.link`)
+      service: camera
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
+
+  middlewares:
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://auth.knoesen.link"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups" 
+          - "Remote-Name"
+          - "Remote-Email"
+    auth:
+      basicAuth:
+        users:
+          - "andrew:$apr1$7yBzPevP$RM.KzATsBdoIt2IcY6xEF."
+
+  services:
+    authelia:
+      loadBalancer:
+        servers:
+          - url: "http://authelia:9091"
+    glances:
+      loadbalancer:
+        servers:
+          - url: http://192.168.0.200:61208
+        passHostHeader: true
+    overseerr:
+      loadbalancer:
+        servers:
+          - url: "http://overseerr:5055"
+        passHostHeader: true
+    hass:
+      loadbalancer:
+        servers:
+          - url: http://192.168.0.200:8123
+        passHostHeader: true
+    plex:
+      loadbalancer:
+        servers:
+          - url: http://192.168.0.115:32400
+        passHostHeader: true
+    homarr:
+      loadbalancer:
+        servers:
+          - url: http://homarr:7575
+        passHostHeader: true
+    grafana:
+      loadbalancer:
+        servers:
+          # - url: http://192.168.0.200:3000
+        passHostHeader: true
+    sab:
+      loadbalancer:
+        servers:
+          - url: http://192.168.0.115:8081
+        passHostHeader: true
+    sonarr:
+      loadbalancer:
+        servers:
+          - url: http://sonarr:8989
+        passHostHeader: true
+    radarr:
+      loadbalancer:
+        servers:
+          - url: http://radarr:7878
+        passHostHeader: true
+    readarr:
+      loadbalancer:
+        servers:
+          # - url: http://192.168.0.200:8787
+        passHostHeader: true
+    tdarr:
+      loadbalancer:
+        servers:
+          # - url: http://192.168.0.200:8265
+        passHostHeader: true
+    torrent:
+      loadbalancer:
+        servers:
+          # - url: http://192.168.0.200:8080
+        passHostHeader: true
+    calibre:
+      loadbalancer:
+        servers:
+          # - url: http://192.168.0.200:9090
+        passHostHeader: true
+    camera:
+      loadbalancer:
+        servers:
+          # - url: http://192.168.0.200:8890
+        passHostHeader: true

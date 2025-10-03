@@ -1,0 +1,8 @@
+log
+acme.json
+**.bak
+.env
+config/authelia/db.sqlite3
+config/authelia/users_database.yml
+data/traefik/acme.json
+notification.txt

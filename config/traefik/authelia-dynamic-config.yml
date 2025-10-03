@@ -1,0 +1,26 @@
+http:
+  routers:
+    authelia:
+      rule: "Host(`auth.knoesen.link`)"
+      entrypoints:
+        - "websecure"
+      service: authelia
+      tls:
+        certResolver: myresolver
+
+  services:
+    authelia:
+      loadBalancer:
+        servers:
+          - url: "http://authelia:9091"
+
+  middlewares:
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://auth.knoesen.link"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups" 
+          - "Remote-Name"
+          - "Remote-Email"

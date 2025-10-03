@@ -1,0 +1,40 @@
+#traefik.yml
+
+accessLog:
+  filePath: /log/access.log
+  format: json
+
+log:
+  filePath: /log/log.log
+  level: ERROR
+  format: json
+
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+  file:
+    filename: /etc/traefik/traefik_dynamic.yml
+    watch: true
+
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: andrewknoesen@gmail.com
+      storage: /data/acme.json
+      caServer: https://acme-v02.api.letsencrypt.org/directory
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
