@@ -2,7 +2,6 @@ log
 acme.json
 **.bak
 .env
-config/authelia/db.sqlite3
-config/authelia/users_database.yml
-data/traefik/acme.json
+db.sqlite3
+users_database.yml
 notification.txt
