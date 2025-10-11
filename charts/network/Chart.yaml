@@ -10,6 +10,3 @@ dependencies:
   - name: traefik
     version: 37.1.2
     repository: "file://charts/traefik"
-  - name: metallb
-    version: 0.15.2
-    repository: "file://charts/metallb"
