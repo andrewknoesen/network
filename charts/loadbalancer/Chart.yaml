@@ -9,4 +9,4 @@ appVersion: "1.16.0"
 dependencies:
   - name: metallb
     version: 0.15.2
-    repository: "file://charts/metallb"
+    repository: "file://charts/loadbalancer"
