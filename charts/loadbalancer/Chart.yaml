@@ -1,5 +1,5 @@
 apiVersion: v2
-name: network
+name: loadbalancer
 description: A Helm chart for Kubernetes that will support a networking layer of the homelab.
 
 type: application
