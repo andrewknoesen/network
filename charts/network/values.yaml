@@ -1,1 +1,6 @@
 network:
+  traefik:
+    service:
+      type: NodePort
+      nodePorts:
+        http: 10080
