@@ -5,7 +5,7 @@ type: application
 version: 0.1.0
 appVersion: "0.1.0"
 
-dependencies:
+dependecies:
   - name: traefik
     version: 3.5.3
     repository: https://traefik.github.io/charts
