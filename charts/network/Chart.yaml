@@ -5,3 +5,8 @@ description: A Helm chart for Kubernetes that will support a networking layer of
 type: application
 version: 0.1.0
 appVersion: "1.16.0"
+
+dependecies:
+  name: network
+  version: 0.1.0
+  repository: "file://charts/traefik"
