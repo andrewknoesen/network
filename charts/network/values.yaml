@@ -1,7 +1,14 @@
 traefik:
+  providers:
+    kubernetesCRD:
+      enabled: true
+      allowCrossNamespace: true
   ingressRoute:
     dashboard:
       enabled: true
+  ports:
+    web:
+      exposedPort: 80
   service:
     type: LoadBalancer
     spec:
