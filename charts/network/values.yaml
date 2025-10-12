@@ -1,7 +1,10 @@
 traefik:
   api:
-    dashboard: true
-    insecure: true
+    dashboard: true # Enable internal dashboard
+    insecure: true # (Optional) expose dashboard/API on the Traefik entryPoint
   service:
     type: LoadBalancer
-    loadBalancerIP: 192.168.0.246
+    loadBalancerIP: 192.168.0.250
+  ingressRoute:
+    dashboard:
+      enabled: true # Create a public IngressRoute for /dashboard path
