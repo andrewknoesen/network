@@ -14,29 +14,3 @@ traefik:
       loadBalancerIP: 192.168.0.250
 
 cloudflare-tunnel:
-  replicaCount: 2
-
-  image:
-    repository: cloudflare/cloudflared
-    tag: latest
-    pullPolicy: IfNotPresent
-
-  secret:
-    name: tunnel-token
-    key: token
-
-  logLevel: debug
-
-  metrics:
-    address: 0.0.0.0
-    port: 2000
-
-  securityContext:
-    enablePing: true
-    pingGroupRange: "65532 65532"
-
-  livenessProbe:
-    path: /ready
-    failureThreshold: 1
-    initialDelaySeconds: 10
-    periodSeconds: 10
