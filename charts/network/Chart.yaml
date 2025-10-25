@@ -10,3 +10,6 @@ dependencies:
   - name: traefik
     version: 37.1.2
     repository: "https://traefik.github.io/charts"
+  - name: cloudflared
+    version: 2.2.1
+    repository: https://cloudflare.github.io/helm-charts
