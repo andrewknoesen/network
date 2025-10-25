@@ -11,5 +11,5 @@ dependencies:
     version: 37.1.2
     repository: "https://traefik.github.io/charts"
   - name: cloudflare-tunnel
-    version: 2.2.1
+    version: 0.3.2
     repository: https://cloudflare.github.io/helm-charts
