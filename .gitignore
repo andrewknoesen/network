@@ -5,3 +5,4 @@ acme.json
 db.sqlite3
 users_database.yml
 notification.txt
+secret
