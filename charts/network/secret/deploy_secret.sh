@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kubectl create -f tunnel-token.yaml
+kubectl create -f tunnel-token.yaml -n network
