@@ -12,5 +12,3 @@ traefik:
     type: LoadBalancer
     spec:
       loadBalancerIP: 192.168.0.250
-
-cloudflare-tunnel:
