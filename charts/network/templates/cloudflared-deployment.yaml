@@ -6,7 +6,7 @@ metadata:
   labels:
     app: cloudflared
 spec:
-  replicas: {{ .Values.cloudflare-tunnel.replicaCount }}
+  replicas: {{ index .Values "cloudflare-tunnel" "replicaCount" }}
   selector:
     matchLabels:
       app: cloudflared
@@ -15,36 +15,35 @@ spec:
       labels:
         app: cloudflared
     spec:
-      {{- if .Values.cloudflare-tunnel.securityContext.enablePing }}
+      {{- if (index .Values "cloudflare-tunnel" "securityContext" "enablePing") }}
       securityContext:
         sysctls:
           - name: net.ipv4.ping_group_range
-            value: {{ .Values.cloudflare-tunnel.securityContext.pingGroupRange | quote }}
+            value: {{ index .Values "cloudflare-tunnel" "securityContext" "pingGroupRange" | quote }}
       {{- end }}
       containers:
         - name: cloudflared
-          image: "{{ .Values.cloudflare-tunnel.image.repository }}:{{ .Values.cloudflare-tunnel.image.tag }}"
-          imagePullPolicy: {{ .Values.cloudflare-tunnel.image.pullPolicy }}
+          image: {{ index .Values "cloudflare-tunnel" "image" "repository" }}:{{ index .Values "cloudflare-tunnel" "image" "tag" }}
+          imagePullPolicy: {{ index .Values "cloudflare-tunnel" "image" "pullPolicy" }}
           env:
             - name: TUNNEL_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cloudflare-tunnel.secret.name }}
-                  key: {{ .Values.cloudflare-tunnel.secret.key }}
+                  name: {{ index .Values "cloudflare-tunnel" "secret" "name" }}
+                  key: {{ index .Values "cloudflare-tunnel" "secret" "key" }}
           command:
             - cloudflared
             - tunnel
             - --no-autoupdate
             - --loglevel
-            - {{ .Values.cloudflare-tunnel.logLevel }}
+            - {{ index .Values "cloudflare-tunnel" "logLevel" }}
             - --metrics
-            - {{ .Values.cloudflare-tunnel.metrics.address }}:{{ .Values.cloudflare-tunnel.metrics.port }}
+            - {{ index .Values "cloudflare-tunnel" "metrics" "address" }}:{{ index .Values "cloudflare-tunnel" "metrics" "port" }}
             - run
           livenessProbe:
             httpGet:
-              path: {{ .Values.cloudflare-tunnel.livenessProbe.path }}
-              port: {{ .Values.cloudflare-tunnel.metrics.port }}
-            failureThreshold: {{ .Values.cloudflare-tunnel.livenessProbe.failureThreshold }}
-            initialDelaySeconds: {{ .Values.cloudflare-tunnel.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.cloudflare-tunnel.livenessProbe.periodSeconds }}
-
+              path: {{ index .Values "cloudflare-tunnel" "livenessProbe" "path" }}
+              port: {{ index .Values "cloudflare-tunnel" "metrics" "port" }}
+            failureThreshold: {{ index .Values "cloudflare-tunnel" "livenessProbe" "failureThreshold" }}
+            initialDelaySeconds: {{ index .Values "cloudflare-tunnel" "livenessProbe" "initialDelaySeconds" }}
+            periodSeconds: {{ index .Values "cloudflare-tunnel" "livenessProbe" "periodSeconds" }}
