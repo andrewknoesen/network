@@ -30,6 +30,16 @@ http:
       middlewares:
         - auth
 
+    argo:
+      rule: Host(`argo.knoesen.link`)
+      service: argo
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
     overseerr:
       rule: Host(`overseerr.knoesen.link`)
       service: overseerr
@@ -149,7 +159,6 @@ http:
       middlewares:
         - authelia@file
 
-
   middlewares:
     authelia:
       forwardAuth:
@@ -157,7 +166,7 @@ http:
         trustForwardHeader: true
         authResponseHeaders:
           - "Remote-User"
-          - "Remote-Groups" 
+          - "Remote-Groups"
           - "Remote-Name"
           - "Remote-Email"
     auth:
@@ -174,6 +183,11 @@ http:
       loadbalancer:
         servers:
           - url: http://192.168.0.200:61208
+        passHostHeader: true
+    argo:
+      loadbalancer:
+        servers:
+          - url: "http://192.168.0.200:30080"
         passHostHeader: true
     overseerr:
       loadbalancer:
