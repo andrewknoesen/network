@@ -8,10 +8,6 @@ traefik:
       matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
       entryPoints:
         - web
-  ports:
-    web:
-      redirectTo:
-        port: websecure
   service:
     type: LoadBalancer
     spec:
