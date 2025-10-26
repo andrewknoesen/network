@@ -30,9 +30,9 @@ traefik:
     addInternals: true
     prometheus:
       service:
-        enabled: true
+        enabled: false
       serviceMonitor:
-        enabled: true
+        enabled: false
 
   tracing:
     otlp:

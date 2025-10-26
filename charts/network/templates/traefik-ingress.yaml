@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: traefik.gretna-en-werner.com
+  - host: k3s.knoesen.link
     http:
       paths:
       - path: /
