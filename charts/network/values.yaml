@@ -16,7 +16,7 @@ traefik:
   ports:
     traefik:
       port: 8080
-      expose: false
+      expose: true
       exposedPort: 8080
     web:
       port: 80
