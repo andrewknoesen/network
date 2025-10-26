@@ -39,7 +39,7 @@ providers:
 # Dashboard IngressRoute
 ingressRoute:
   dashboard:
-    enabled: true
+    enabled: false
     matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
     entryPoints:
       - web
