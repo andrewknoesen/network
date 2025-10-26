@@ -1,5 +1,5 @@
 # Cloudflared configuration
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: cloudflare/cloudflared
@@ -16,7 +16,7 @@ ingress:
   enabled: true
   rules:
     - hostname: "*k3s.knoesn.link"
-      service: "https://traefik.network.svc.cluster.local:443"
+      service: "https://network-traefik.network.svc.cluster.local:443"
       originRequest:
         noTLSVerify: true
     - service: "http_status:404"
