@@ -2,9 +2,16 @@ traefik:
   providers:
     kubernetesCRD:
       enabled: true
+    kubernetesGateway:
+      enabled: true
+    kubernetesIngress:
+      publishedService:
+        enabled: true
   ingressRoute:
     dashboard:
       enabled: true
+      additionalArguments:
+        - "--api.insecure=true"
       matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
       entryPoints:
         - web
@@ -12,3 +19,24 @@ traefik:
     type: LoadBalancer
     spec:
       loadBalancerIP: 192.168.0.250
+  api:
+    insecure: true
+    dashboard: true
+
+  gateway:
+    namespacePolicy: All
+
+  metrics:
+    addInternals: true
+    prometheus:
+      service:
+        enabled: true
+      serviceMonitor:
+        enabled: true
+
+  tracing:
+    otlp:
+      enabled: true
+
+  global:
+    sendAnonymousUsage: false
