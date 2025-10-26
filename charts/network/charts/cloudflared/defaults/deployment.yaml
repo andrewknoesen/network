@@ -1,73 +1,49 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-deployment
+  name: cloudflared-deployment
   namespace: {{ .Release.Namespace }}
-  labels:
-    app: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.spec.replicas}}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
       pod: cloudflared
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
         pod: cloudflared
     spec:
-      {{- if .Values.securityContext }}
       securityContext:
-        {{- if .Values.securityContext.sysctls }}
         sysctls:
-        {{- range .Values.securityContext.sysctls }}
-          - name: {{ .name }}
-            value: {{ .value | quote }}
-        {{- end }}
-        {{- end }}
-      {{- end }}
+        # Allows ICMP traffic (ping, traceroute) to resources behind cloudflared.
+          - name: net.ipv4.ping_group_range
+            value: "65532 65532"
       containers:
-        - name: cloudflared
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - image: cloudflare/cloudflared:latest
+          name: cloudflared
           env:
+            # Defines an environment variable for the tunnel token.
             - name: TUNNEL_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.tunnelToken.secretName }}
-                  key: {{ .Values.tunnelToken.secretKey }}
+                  name: tunnel-token
+                  key: token
           command:
+            # Configures tunnel run parameters
             - cloudflared
             - tunnel
-            - --config
-            - /etc/cloudflared/config.yaml
-            {{- if .Values.cloudflared.noAutoUpdate }}
             - --no-autoupdate
-            {{- end }}
-            {{- if .Values.cloudflared.logLevel }}
             - --loglevel
-            - {{ .Values.cloudflared.logLevel }}
-            {{- end }}
-            {{- if .Values.cloudflared.metrics.enabled }}
+            - debug
             - --metrics
-            - "0.0.0.0:{{ .Values.cloudflared.metrics.port }}"
-            {{- end }}
+            - 0.0.0.0:2000
             - run
-          volumeMounts:
-            - name: config
-              mountPath: /etc/cloudflared
-              readOnly: true
-          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.httpGet.path }}
-              port: {{ .Values.livenessProbe.httpGet.port }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          {{- end }}
-      volumes:
-        - name: config
-          configMap:
-            name: {{ .Release.Name }}-config
+              # Cloudflared has a /ready endpoint which returns 200 if and only if
+              # it has an active connection to Cloudflare's network.
+              path: /ready
+              port: 2000
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
