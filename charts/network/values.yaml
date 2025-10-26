@@ -40,7 +40,7 @@ treafik:
   # Dashboard IngressRoute
   ingressRoute:
     dashboard:
-      enabled: false
+      enabled: true
       matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
       entryPoints:
         - web
