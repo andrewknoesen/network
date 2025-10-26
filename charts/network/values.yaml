@@ -1,68 +1,69 @@
-# Global arguments - applies to all Traefik instances
-additionalArguments:
-  - "--api.insecure=true"
+treafik:
+  # Global arguments - applies to all Traefik instances
+  additionalArguments:
+    - "--api.insecure=true"
 
-# API and Dashboard configuration
-api:
-  insecure: true
-  dashboard: true
+  # API and Dashboard configuration
+  api:
+    insecure: true
+    dashboard: true
 
-# Ping health check
-ping:
-  enabled: true
-
-# Ports configuration
-ports:
-  traefik:
-    port: 8080
-    expose: false
-    exposedPort: 8080
-  web:
-    port: 80
-    exposedPort: 80
-  websecure:
-    port: 443
-    exposedPort: 443
-
-# Providers configuration
-providers:
-  kubernetesCRD:
+  # Ping health check
+  ping:
     enabled: true
-  kubernetesGateway:
-    enabled: true
-    namespacePolicy: All
-  kubernetesIngress:
-    enabled: true
-    publishedService:
+
+  # Ports configuration
+  ports:
+    traefik:
+      port: 8080
+      expose: false
+      exposedPort: 8080
+    web:
+      port: 80
+      exposedPort: 80
+    websecure:
+      port: 443
+      exposedPort: 443
+
+  # Providers configuration
+  providers:
+    kubernetesCRD:
+      enabled: true
+    kubernetesGateway:
+      enabled: true
+      namespacePolicy: All
+    kubernetesIngress:
+      enabled: true
+      publishedService:
+        enabled: true
+
+  # Dashboard IngressRoute
+  ingressRoute:
+    dashboard:
+      enabled: false
+      matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+      entryPoints:
+        - web
+
+  # Service configuration
+  service:
+    type: LoadBalancer
+    spec:
+      loadBalancerIP: 192.168.0.250
+
+  # Metrics configuration
+  metrics:
+    prometheus:
+      service:
+        enabled: false
+      serviceMonitor:
+        enabled: false
+
+  # Tracing configuration
+  tracing:
+    otlp:
       enabled: true
 
-# Dashboard IngressRoute
-ingressRoute:
-  dashboard:
-    enabled: false
-    matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
-    entryPoints:
-      - web
-
-# Service configuration
-service:
-  type: LoadBalancer
-  spec:
-    loadBalancerIP: 192.168.0.250
-
-# Metrics configuration
-metrics:
-  prometheus:
-    service:
-      enabled: false
-    serviceMonitor:
-      enabled: false
-
-# Tracing configuration
-tracing:
-  otlp:
-    enabled: true
-
-# Global settings
-global:
-  sendAnonymousUsage: false
+  # Global settings
+  global:
+    sendAnonymousUsage: false
