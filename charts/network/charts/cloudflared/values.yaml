@@ -1,2 +1,52 @@
-spec:
-  replicas: 1
+# Cloudflared configuration
+replicaCount: 2
+
+image:
+  repository: cloudflare/cloudflared
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Tunnel token secret (existing secret)
+tunnelToken:
+  secretName: tunnel-token
+  secretKey: token
+
+# Ingress configuration for routing to Traefik
+ingress:
+  enabled: true
+  rules:
+    - hostname: "*k3s.knoesn.link"
+      service: "https://traefik.network.svc.cluster.local:443"
+      originRequest:
+        noTLSVerify: true
+    - service: "http_status:404"
+
+# Cloudflared command options
+cloudflared:
+  logLevel: debug
+  noAutoUpdate: true
+  metrics:
+    enabled: true
+    port: 2000
+
+# Security context
+securityContext:
+  sysctls:
+    - name: net.ipv4.ping_group_range
+      value: "65532 65532"
+
+# Liveness probe configuration
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /ready
+    port: 2000
+  failureThreshold: 1
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+# Service configuration (optional - for exposing metrics)
+service:
+  enabled: false
+  type: ClusterIP
+  port: 2000
