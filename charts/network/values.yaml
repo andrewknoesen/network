@@ -1,4 +1,6 @@
 traefik:
+  dashboardIngressRoute:
+    enabled: false
   # Global arguments - applies to all Traefik instances
   additionalArguments:
     - "--api.insecure=true"
@@ -37,14 +39,6 @@ traefik:
       enabled: true
       publishedService:
         enabled: true
-
-  # # Dashboard IngressRoute
-  # ingressRoute:
-  #   dashboard:
-  #     enabled: true
-  #     matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
-  #     entryPoints:
-  #       - web
 
   # Service configuration
   service:
