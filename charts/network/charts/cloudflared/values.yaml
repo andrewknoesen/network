@@ -15,7 +15,7 @@ tunnelToken:
 ingress:
   enabled: true
   rules:
-    - hostname: "*.k3s.knoesn.link"
+    - hostname: "*.k3s.knoesen.link"
       service: "https://network-traefik.network.svc.cluster.local:443"
       originRequest:
         noTLSVerify: true
