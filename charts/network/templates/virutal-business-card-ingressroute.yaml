@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`business.k3s.knoesen.link`)
+    - match: Host(`k3s.knoesen.link`)
       kind: Rule
       services:
         - name: virtual-business-card-charts
