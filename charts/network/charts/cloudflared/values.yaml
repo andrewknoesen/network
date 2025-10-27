@@ -15,11 +15,15 @@ tunnelToken:
 ingress:
   enabled: true
   rules:
+    - hostname: "k3s.knoesen.link"
+      service: "https://network-traefik.network.svc.cluster.local:443"
+      originRequest:
+        noTLSVerify: true
     - hostname: "*.k3s.knoesen.link"
       service: "https://network-traefik.network.svc.cluster.local:443"
       originRequest:
         noTLSVerify: true
-    - service: "http_status:454"
+    - service: "http_status:404"
 
 # Cloudflared command options
 cloudflared:
