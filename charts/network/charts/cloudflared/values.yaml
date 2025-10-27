@@ -16,11 +16,11 @@ ingress:
   enabled: true
   rules:
     - hostname: "k3s.knoesen.link"
-      service: "https://network-traefik.network.svc.cluster.local:443"
+      service: "https://network-traefik.network.svc.cluster.local:80"
       originRequest:
         noTLSVerify: true
     - hostname: "*.k3s.knoesen.link"
-      service: "https://network-traefik.network.svc.cluster.local:443"
+      service: "https://network-traefik.network.svc.cluster.local:80"
       originRequest:
         noTLSVerify: true
     - service: "http_status:404"
