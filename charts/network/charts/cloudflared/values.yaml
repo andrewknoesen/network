@@ -19,7 +19,7 @@ ingress:
       service: "https://network-traefik.network.svc.cluster.local:443"
       originRequest:
         noTLSVerify: true
-    - service: "http_status:404"
+    - service: "http_status:454"
 
 # Cloudflared command options
 cloudflared:
