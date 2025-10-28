@@ -1,4 +1,14 @@
 apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-business-prefix
+  namespace: virtual-business-card
+spec:
+  stripPrefix:
+    prefixes:
+      - /business
+---
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: virtual-business-card
@@ -7,13 +17,10 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`app.k3s.knoesen.link`)
+    - match: Host(`k3s.knoesen.link`) && PathPrefix(`/business`)
       kind: Rule
-      services:
-        - name: virtual-business-card-charts
-          port: 80
-    - match: Host(`k3s.knoesen.link`)
-      kind: Rule
+      middlewares:
+        - name: strip-business-prefix
       services:
         - name: virtual-business-card-charts
           port: 80
