@@ -15,6 +15,14 @@ tunnelToken:
 ingress:
   enabled: true
   rules:
+    - hostname: "holoconnect.link"
+      service: "http://network-traefik.network.svc.cluster.local:80"
+      originRequest:
+        noTLSVerify: true
+    - hostname: "*.holoconnect.link"
+      service: "http://network-traefik.network.svc.cluster.local:80"
+      originRequest:
+        noTLSVerify: true
     - hostname: "k3s.knoesen.link"
       service: "http://network-traefik.network.svc.cluster.local:80"
       originRequest:
