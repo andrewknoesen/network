@@ -1,9 +1,9 @@
 dependencies:
 - name: traefik
   repository: https://traefik.github.io/charts
-  version: 37.2.0
+  version: 37.3.0
 - name: cloudflare-tunnel
   repository: file://charts/cloudflared
   version: 0.1.0
-digest: sha256:920634acc9dcca53c7eb07d029cbf50ed4918dd21740fc894b9a90593d47849e
-generated: "2025-11-02T01:08:08.876918273Z"
+digest: sha256:3cd0979c73e0541879f6d06fe0a033c49a0a9bb22afa30aa165c1326edf32afa
+generated: "2025-11-15T01:03:39.995645481Z"
