@@ -8,7 +8,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: traefik
-    version: 37.3.0
+    version: 37.4.0
     repository: "https://traefik.github.io/charts"
   - name: cloudflare-tunnel
     version: 0.1.0
