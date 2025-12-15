@@ -187,7 +187,7 @@ http:
     argo:
       loadbalancer:
         servers:
-          - url: "http://192.168.0.200:30080"
+          - url: "http://192.168.0.116:30080"
         passHostHeader: true
     overseerr:
       loadbalancer:
