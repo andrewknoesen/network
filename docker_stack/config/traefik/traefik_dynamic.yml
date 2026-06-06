@@ -59,6 +59,14 @@ http:
       middlewares:
         - authelia@file
 
+    n8n:
+      rule: Host(`n8n.knoesen.link`)
+      service: n8n
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+
     plex:
       rule: Host(`plex.knoesen.link`)
       service: plex
@@ -66,8 +74,8 @@ http:
         - websecure
       tls:
         certresolver: myresolver
-      middlewares:
-        - authelia@file
+#      middlewares:
+#        - authelia@file
 
     hass:
       rule: Host(`hass.knoesen.link`)
@@ -103,22 +111,6 @@ http:
       middlewares:
         - authelia@file
 
-    torrent:
-      rule: Host(`torrent.knoesen.link`)
-      service: torrent
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
-    tdarr:
-      rule: Host(`tdarr.knoesen.link`)
-      service: tdarr
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
     sonarr:
       rule: Host(`sonarr.knoesen.link`)
       service: sonarr
@@ -130,30 +122,6 @@ http:
     radarr:
       rule: Host(`radarr.knoesen.link`)
       service: radarr
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
-    readarr:
-      rule: Host(`readarr.knoesen.link`)
-      service: readarr
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
-    calibre:
-      rule: Host(`calibre.knoesen.link`)
-      service: calibre
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
-    camera:
-      rule: Host(`camera.knoesen.link`)
-      service: camera
       tls:
         certresolver: myresolver
       middlewares:
@@ -176,7 +144,7 @@ http:
 
   services:
     authelia:
-      loadBalancer:
+      loadbalancer:
         servers:
           - url: "http://authelia:9091"
     glances:
@@ -197,17 +165,17 @@ http:
     hass:
       loadbalancer:
         servers:
-          - url: http://192.168.0.200:8123
+          - url:" http://192.168.0.200:8123"
         passHostHeader: true
     plex:
       loadbalancer:
         servers:
-          - url: http://192.168.0.115:32400
+          - url: "http://192.168.0.115:32400"
         passHostHeader: true
     homarr:
       loadbalancer:
         servers:
-          - url: http://homarr:7575
+          - url: "http://homarr:7575"
         passHostHeader: true
     grafana:
       loadbalancer:
@@ -217,40 +185,20 @@ http:
     sab:
       loadbalancer:
         servers:
-          - url: http://192.168.0.115:8081
+          - url: "http://192.168.0.115:8081"
         passHostHeader: true
     sonarr:
       loadbalancer:
         servers:
-          - url: http://sonarr:8989
+          - url: "http://sonarr:8989"
         passHostHeader: true
     radarr:
       loadbalancer:
         servers:
-          - url: http://radarr:7878
+          - url: "http://radarr:7878"
         passHostHeader: true
-    readarr:
+    n8n:
       loadbalancer:
         servers:
-          # - url: http://192.168.0.200:8787
-        passHostHeader: true
-    tdarr:
-      loadbalancer:
-        servers:
-          # - url: http://192.168.0.200:8265
-        passHostHeader: true
-    torrent:
-      loadbalancer:
-        servers:
-          # - url: http://192.168.0.200:8080
-        passHostHeader: true
-    calibre:
-      loadbalancer:
-        servers:
-          # - url: http://192.168.0.200:9090
-        passHostHeader: true
-    camera:
-      loadbalancer:
-        servers:
-          # - url: http://192.168.0.200:8890
+          - url: "http://192.168.0.200:5678"
         passHostHeader: true

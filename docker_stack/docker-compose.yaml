@@ -1,12 +1,34 @@
-version: "3.9"
-
 services:
+  #tailscale
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    network_mode: "host"
+    hostname: tailscale-homelab
+    env_file: .env
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - TS_ROUTES=192.168.0.0/24
+      - TS_EXTRA_ARGS=--advertise-exit-node # --accept-routes
+      - TS_USERSPACE=false          # Required: switches to kernel networking mode
+    volumes:
+      - /.data/tailscale/state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - net_raw
+      - sys_module
+    restart: unless-stopped
+
+
   # Cloudflared tunnel service
   tunnel:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
     command: tunnel --no-autoupdate run
-    # env_file: .env
+    env_file: .env
     restart: unless-stopped
     networks:
       - internal
@@ -29,6 +51,7 @@ services:
     image: traefik:latest
     container_name: traefik
     restart: unless-stopped
+    env_file: .env
     networks:
       - media_network
       - internal
@@ -42,6 +65,35 @@ services:
       - "./config/traefik/traefik.yml:/etc/traefik/traefik.yml" 
       - "./config/traefik/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml" 
       - "./log/:/log/"
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+#    network_mode: host
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "880:80/tcp"
+      - "4443:443/tcp"
+    environment:
+      TZ: 'Africa/Johannesburg'
+
+      FTLCONF_dns_listeningMode: "all"
+      FTLCONF_webserver_api_password: "${PIHOLE_PASS}"
+      # Optional but cleaner than Docker's dns: block
+      FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1"
+
+      WEBPASSWORD: ${PIHOLE_PASS}
+    volumes:
+      - './.data/pihole/etc-pihole/:/etc/pihole/'
+      - './.data/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    cap_add:
+      - NET_ADMIN
+    restart: always
+#    networks:
+#      dns_net:
+#        ipv4_address: 172.23.0.7
 
 networks:
   media_network:

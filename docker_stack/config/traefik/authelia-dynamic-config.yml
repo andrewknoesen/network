@@ -10,7 +10,7 @@ http:
 
   services:
     authelia:
-      loadBalancer:
+      loadbalancer:
         servers:
           - url: "http://authelia:9091"
 

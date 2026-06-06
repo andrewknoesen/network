@@ -1,6 +1,8 @@
 log
 acme.json
 **.bak
+data
+.data
 .env
 db.sqlite3
 users_database.yml
