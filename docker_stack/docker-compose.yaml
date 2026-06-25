@@ -10,7 +10,8 @@ services:
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
       - TS_ROUTES=192.168.0.0/24
-      - TS_EXTRA_ARGS=--advertise-exit-node # --accept-routes
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--reset --advertise-exit-node --accept-routes
       - TS_USERSPACE=false          # Required: switches to kernel networking mode
     volumes:
       - /.data/tailscale/state:/var/lib/tailscale
