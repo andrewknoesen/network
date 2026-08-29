@@ -40,6 +40,21 @@ http:
       middlewares:
         - authelia@file
 
+    salon_crm:
+      rule: Host(`crm.knoesen.link`)
+      service: salon_crm
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+    salon_crm_api:
+      rule: Host(`crm.knoesen.link`) && PathPrefix(`/api`)
+      service: salon_crm_api
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+
     overseerr:
       rule: Host(`overseerr.knoesen.link`)
       service: overseerr
@@ -147,6 +162,18 @@ http:
       loadbalancer:
         servers:
           - url: "http://authelia:9091"
+    
+    salon_crm:
+      loadbalancer:
+        servers:
+          - url: "http://salon-crm-frontend:3000"
+        passHostHeader: true
+    salon_crm_api:
+      loadbalancer:
+        servers:
+          - url: "http://salon-crm-backend:8000"
+        passHostHeader: true
+  
     glances:
       loadbalancer:
         servers:
@@ -165,7 +192,7 @@ http:
     hass:
       loadbalancer:
         servers:
-          - url:" http://192.168.0.200:8123"
+          - url: "http://192.168.0.200:8123"
         passHostHeader: true
     plex:
       loadbalancer:
