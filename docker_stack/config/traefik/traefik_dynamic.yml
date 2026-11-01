@@ -30,16 +30,6 @@ http:
       middlewares:
         - auth
 
-    argo:
-      rule: Host(`argo.knoesen.link`)
-      service: argo
-      entrypoints:
-        - websecure
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
     salon_crm:
       rule: Host(`crm.knoesen.link`)
       service: salon_crm
@@ -102,22 +92,6 @@ http:
       middlewares:
         - authelia@file
 
-    grafana:
-      rule: Host(`grafana.knoesen.link`)
-      service: grafana
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
-    glances:
-      rule: Host(`glances.knoesen.link`)
-      service: glances
-      tls:
-        certresolver: myresolver
-      middlewares:
-        - authelia@file
-
     sab:
       rule: Host(`sab.knoesen.link`)
       service: sab
@@ -174,16 +148,6 @@ http:
           - url: "http://salon-crm-backend:8000"
         passHostHeader: true
   
-    glances:
-      loadbalancer:
-        servers:
-          - url: http://192.168.0.200:61208
-        passHostHeader: true
-    argo:
-      loadbalancer:
-        servers:
-          - url: "http://192.168.0.116:30080"
-        passHostHeader: true
     overseerr:
       loadbalancer:
         servers:
@@ -203,11 +167,6 @@ http:
       loadbalancer:
         servers:
           - url: "http://homarr:7575"
-        passHostHeader: true
-    grafana:
-      loadbalancer:
-        servers:
-          # - url: http://192.168.0.200:3000
         passHostHeader: true
     sab:
       loadbalancer:
