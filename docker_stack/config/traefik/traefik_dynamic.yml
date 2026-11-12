@@ -116,6 +116,18 @@ http:
       middlewares:
         - authelia@file
 
+    games:
+      # games_rule_chatbot UI (nginx also proxies /api). Behind Authelia:
+      # every upload, rulebook search and question costs Gemini money.
+      rule: Host(`games.knoesen.link`)
+      service: games
+      entrypoints:
+        - websecure
+      tls:
+        certresolver: myresolver
+      middlewares:
+        - authelia@file
+
   middlewares:
     authelia:
       forwardAuth:
@@ -187,4 +199,9 @@ http:
       loadbalancer:
         servers:
           - url: "http://192.168.0.200:5678"
+        passHostHeader: true
+    games:
+      loadbalancer:
+        servers:
+          - url: "http://192.168.0.200:8721"
         passHostHeader: true
